@@ -1,0 +1,33 @@
+name: Video diario
+
+on:
+  schedule:
+    - cron: "0 9 * * *" # todos los días a las 9:00 UTC
+  workflow_dispatch: {} # botón para lanzarlo a mano
+
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg fonts-dejavu
+      - run: npm ci
+      - name: Generar y subir vídeo (en privado, para revisión)
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          PIXABAY_API_KEY: ${{ secrets.PIXABAY_API_KEY }}
+          YT_CLIENT_ID: ${{ secrets.YT_CLIENT_ID }}
+          YT_CLIENT_SECRET: ${{ secrets.YT_CLIENT_SECRET }}
+          YT_REFRESH_TOKEN: ${{ secrets.YT_REFRESH_TOKEN }}
+          SUBIR: "true"
+        run: node src/index.js
+      - name: Guardar vídeo como artefacto (copia de seguridad)
+        uses: actions/upload-artifact@v4
+        with:
+          name: video-del-dia
+          path: salida/**/video.mp4
+          retention-days: 7
