@@ -44,6 +44,14 @@ async function main() {
 }
 
 main().catch((err) => {
-  console.error("Pipeline fallido:", err.message);
+  if (err.message?.includes("invalid_grant")) {
+    console.error(
+      "Pipeline fallido: invalid_grant — el YT_REFRESH_TOKEN ha caducado o fue revocado.\n" +
+        "Mientras la app OAuth no esté auditada por Google, los refresh tokens duran solo 7 días.\n" +
+        "Solución: ejecuta `npm run autorizar` de nuevo y actualiza el secreto YT_REFRESH_TOKEN en GitHub."
+    );
+  } else {
+    console.error("Pipeline fallido:", err.message);
+  }
   process.exit(1);
 });

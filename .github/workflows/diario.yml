@@ -26,8 +26,10 @@ jobs:
           SUBIR: "true"
         run: node src/index.js
       - name: Guardar vídeo como artefacto (copia de seguridad)
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: video-del-dia
           path: salida/**/video.mp4
           retention-days: 7
+          if-no-files-found: ignore

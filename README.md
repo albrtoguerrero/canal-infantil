@@ -30,6 +30,7 @@ Flujo: **Gemini** (guion) → **Edge TTS** (voz) → **Pixabay** (ilustraciones)
 
 ## Cosas importantes que debes saber
 
+- **El `YT_REFRESH_TOKEN` caduca cada 7 días mientras la app OAuth no esté auditada por Google.** Si el workflow falla con `invalid_grant`, es eso: vuelve a ejecutar `npm run autorizar`, acepta permisos y actualiza el secreto `YT_REFRESH_TOKEN` en *Settings → Secrets and variables → Actions*. Para evitar esto de forma permanente, publica la app OAuth (pantalla de consentimiento) en modo "En producción" desde Google Cloud Console.
 - **Los vídeos quedan en privado a propósito.** Mientras Google no audite tu app OAuth, la API los bloquea en privado de todos modos. Pero aunque pase la auditoría, mantén la revisión manual: es contenido para niños y YouTube está eliminando activamente canales infantiles generados con IA sin supervisión humana ("AI slop"). Tu revisión diaria es lo que separa un canal legítimo de uno purgable.
 - **Made for Kids / COPPA**: los vídeos se marcan automáticamente como contenido infantil (`selfDeclaredMadeForKids`) y como contenido sintético. Es obligatorio legalmente; implica anuncios no personalizados y comentarios desactivados.
 - **Monetización**: no esperes monetizar solo con esto. La política de "contenido no auténtico" de YouTube (endurecida en julio de 2026) desmonetiza canales de producción masiva sin aporte creativo propio. Para que el canal sea viable a medio plazo: edita los guiones, crea personajes propios recurrentes, mejora las miniaturas… usa el pipeline como base, no como producto final.
